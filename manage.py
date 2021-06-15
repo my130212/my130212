@@ -2,11 +2,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_redis import FlaskRedis
 from flaskext import csrf
 from flask_wtf.csrf import CSRFProtect
-from flask import Flask
+from flask import Flask,session
+from flask_session import Session
+from redis import StrictRedis
 
 class Config(object):
 	"""项目的配置"""
 	Debug = True
+
+	SECRET_KEY = 'zRDv7adXxniygRZvZnAZLLVV2fmY8rhNmdkFZ7xBoVk4ivMV4yU5inhKtxCuYdQ+sJYDm324FLerIkHZknS2gg=='
 
 	#为数据库添加配置
 	SQLALCHEMY_DATABASE_URI = 'mysql://root:mysql@127.0.0.1/3306/mydb'
@@ -15,6 +19,17 @@ class Config(object):
 	#添加redis数据的配置
 	REDIS_HOST = '127.0.0.1'
 	REDIS_PORT = 6379
+
+	#session的保存位置
+	SESSION_TYPE = 'redis'
+
+	SESSION_REDIS = StrictRedis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+	#开启session签名
+	SESSION_USE_SIGNER = True
+	#设置session需过期
+	SESSION_PERMANENT = False
+	#设置session过期时间
+	PERMANENT_SESSION_LIFETIME = 86400 * 2
 
 app = Flask(__name__)
 #加载配置
@@ -25,9 +40,13 @@ db = SQLAlchemy(app)
 redis_store = FlaskRedis(app)
 #开启当前项目 csrf 保护，只做服务器验证功能
 CSRFProtect(app)
+#设置Session的指定保存位置
+Session(app)
+
 
 @app.route("/")
 def index():
+	session['nan'] = '26'
 	return "<h1 style='color:red'>Hello World</h1>"
 
 if __name__ == "__main__":
