@@ -4,11 +4,11 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 
-from config import Config
+from config import config
 
 app = Flask(__name__)
 #加载配置
-app.config.from_object(Config)
+app.config.from_object(config['devolopment'])
 #初始话数据库
 db = SQLAlchemy(app)
 #初始话redis数据库存储
