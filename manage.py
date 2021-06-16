@@ -5,6 +5,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask import Flask,session
 from flask_session import Session
 from redis import StrictRedis
+from flask_script import Manager
+from flask_migrate import Migrate,MigrateCommand
 
 class Config(object):
 	"""项目的配置"""
@@ -42,6 +44,13 @@ redis_store = FlaskRedis(app)
 CSRFProtect(app)
 #设置Session的指定保存位置
 Session(app)
+#使用项目管理器管理app
+manage = Manager(app)
+#设置迁移Migrate对象,将app与db相关联
+migrate = Migrate(app,db)
+#将迁移命令添加到manager对象中
+manage.add_command('db',MigrateCommand)
+
 
 
 @app.route("/")
@@ -50,4 +59,4 @@ def index():
 	return "<h1 style='color:red'>Hello World</h1>"
 
 if __name__ == "__main__":
-	app.run()
+	manage.run()
