@@ -1,4 +1,6 @@
-from flask import session
+import logging
+
+from flask import session,current_app
 from flask_script import Manager
 from flask_migrate import Migrate,MigrateCommand
 
@@ -17,6 +19,12 @@ manage.add_command('db',MigrateCommand)
 def index():
 
 	session['nan'] = '26'
+	logging.debug('测试debug')
+	logging.info('测试idfo')
+	logging.warning('测试warning')
+	logging.error('测试error')
+	logging.fatal('测试fatal')
+	# current_app.logging.debug('测试debug——flask')
 	return "<h1 style='color:red'>Hello World</h1>"
 
 if __name__ == "__main__":

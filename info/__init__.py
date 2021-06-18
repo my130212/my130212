@@ -1,3 +1,6 @@
+import logging
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask
 from flask_redis import FlaskRedis
 from flask_session import Session
@@ -9,7 +12,24 @@ from config import config
 #初始话数据库
 db = SQLAlchemy()
 
+def set_log(config_name):
+	#设置日志的等级
+	logging.basicConfig(level=config[config_name].LOG_LEVEL)
+	#创建记录器对象
+	logger = logging.getLogger()
+	#创建处理器对象
+	Handler = RotatingFileHandler("logs/log",maxBytes = 1024 * 1024 * 100,backupCount = 10)
+	#创建格式化器对象
+	Format = logging.Formatter('%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+	#将格式化器加载给处理器对象
+	Handler.setFormatter(Format)
+	#将处理器加载给记录器对象
+	logger.addHandler(Handler)
+
 def creat_app(config_name):
+	#设置日志
+	set_log(config_name)
+	#创建app对象
 	app = Flask(__name__)
 	#加载配置
 	app.config.from_object(config[config_name])
