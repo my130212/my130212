@@ -17,6 +17,8 @@ class Config(object):
 	REDIS_HOST = '127.0.0.1'
 	REDIS_PORT = 6379
 
+	REDIS_URL = "redis://localhost:6379/2"
+
 	#session的保存位置
 	SESSION_TYPE = 'redis'
 

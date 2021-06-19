@@ -11,6 +11,7 @@ from config import config
 
 #初始话数据库
 db = SQLAlchemy()
+redis_store = None
 
 def set_log(config_name):
 	#设置日志的等级
@@ -36,10 +37,15 @@ def creat_app(config_name):
 	#数据库添加配置
 	db.init_app(app)
 	#初始话redis数据库存储
+	global redis_store
 	redis_store = FlaskRedis(app)
 	#开启当前项目 csrf 保护，只做服务器验证功能
 	CSRFProtect(app)
 	#设置Session的指定保存位置
 	Session(app)
+
+	#导入蓝图并且注册蓝图（防止出现循环导入的错误）
+	from info.models.index import index_blu
+	app.register_blueprint(index_blu)
 
 	return app

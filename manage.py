@@ -15,17 +15,5 @@ migrate = Migrate(app,db)
 #将迁移命令添加到manager对象中
 manage.add_command('db',MigrateCommand)
 
-@app.route("/")
-def index():
-
-	session['nan'] = '26'
-	logging.debug('测试debug')
-	logging.info('测试idfo')
-	logging.warning('测试warning')
-	logging.error('测试error')
-	logging.fatal('测试fatal')
-	# current_app.logging.debug('测试debug——flask')
-	return "<h1 style='color:red'>Hello World</h1>"
-
 if __name__ == "__main__":
 	manage.run()
